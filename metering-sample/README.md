@@ -22,6 +22,15 @@ dev you don't have to send real meters.
 }
 ```
 
+Meters are being sent to the end-point (amberflo or std-out) in batches (a near real time fashion). When recording a meter, the metering client looks at two predefined fields:
+1. maxDelayInSec - Describes the max amount of time the metering-client will wait before trying to send a batch of meters to amberflo. When recording a meter, and if more than 'maxDelayInSec' seconds have passed since the last time we sent a batch to the end-point, the metering client will add the new meter to the batch and send the batch. Otherwise (and if we didn't reach the maxBatchSize) the meter-client will just add the record to the batch.
+2. maxBatchSize - Describes the max amount of meters in a batch. When recording a meter, if we have 'maxBatchSize' meters in the meter-client's queue, the meter-client will send the current meters batch to the end-point, even if we didn't reach the 'maxDelayInSec'.
+
+
+Comment: 
+'isAsync' - this parameter tells the meter-client to have a designated thread for queueing and sending the meters. **The meter client isn't thread safe unless isAsync is set to true**.
+
+
 **For Prod**
 ```
 {
@@ -30,12 +39,18 @@ dev you don't have to send real meters.
   "params": {
     "maxDelayInSec": 0.5,
     "apiKey": "Y2hhbmdlbWU=",
-    "accountName": "demo",
+    "accountName": "demo", 
     "maxBatchSize": 10,
     "serviceName": "name"
   }
 }
 ```
+
+Change the:
+1. accountName - to your amberfo's account number.
+2. apiKey - to your password decoded as a base64 string.
+3. serviceName - to your the name of your service. The service name will be added for all of your meters as an extra dimension.
+
 
 ### Step 2: Define a 'metering_domain' System env
 By default, the metering client uses the 'dev-metering.json' for setting up the metering client. If you want to tell the
@@ -69,7 +84,7 @@ Use the metering builder, factory or templates to send meters.
 
 **factory**
 ```
-   final Double meterValue = 3.55;
+   final Double meterValue = 3D;
    final LocalDateTime time = LocalDateTime.now();
    final Map<String, String> extraDimensionsMap = null;
    
