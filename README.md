@@ -116,6 +116,19 @@ you will need to call 'flushAndClose' explicitly before exiting your app.
    MeteringContext.flushAndClose();
 ```
 
+### Step 5 (optional) - Add slf4j binding
+By default the metering-client will log all of the warnings and errors to `std-err`. If you want it to log these messages elsewhere, all you need to do is to add the a slf4j-binding JAR to your runtime dependencies (unless you allready have it there and then you are all set).
+
+For example, if you use:
+Logging System | Slf4j Binder  | maven
+-------------- | ------------- | -------------
+Log4j-2 | log4j-slf4j-impl | https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
+log4j version 1.2 | slf4j-log4j12 | https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
+java.util.logging (JUL) | slf4j-jdk14 | https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14
+
+More info about setting up slf4j at: http://www.slf4j.org/manual.html
+
+
 ## Detailed Examples
 See the following apps for more detailed examples and additional features:
 1. **MeteringExamples** - Describes the basic steps of using the meter client and sending meters, and the different 
