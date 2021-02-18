@@ -1,0 +1,11 @@
+{
+  "clientType": "DirectClient",
+  "isAsync": true,
+  "params": {
+    "maxDelayInSec": 0.5,
+    "apiKey": "Y2hhbmdlbWU=",
+    "accountName": "demo",
+    "maxBatchSize": 10,
+    "serviceName": "name"
+  }
+}

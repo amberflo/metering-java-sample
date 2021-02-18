@@ -1,0 +1,8 @@
+{
+  "clientType": "StandardOutputClient",
+  "isAsync": true,
+  "params": {
+    "maxDelayInSec": 3,
+    "maxBatchSize": 1
+  }
+}
