@@ -40,7 +40,7 @@ Comment:
   "params": {
     "maxDelayInSec": 0.5,
     "apiKey": "Y2hhbmdlbWU=",
-    "accountName": "demo", 
+    "accountName": "demoAccount", 
     "maxBatchSize": 10,
     "serviceName": "name"
   }
@@ -49,7 +49,7 @@ Comment:
 
 Change the:
 1. **accountName** - to your amberfo's account number.
-2. **apiKey** - to your password decoded as a base64 string.
+2. **apiKey** - to your apikey decoded as a base64 string.
 3. **serviceName** - to your the name of your service. The service name will be added for all of your meters as an extra dimension.
 
 
