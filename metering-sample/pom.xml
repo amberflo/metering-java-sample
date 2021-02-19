@@ -5,12 +5,24 @@
 
   <groupId>com.amberflo.metering.java</groupId>
   <version>1.0.0</version>
-  <artifactId>metering-sample</artifactId>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>10</source>
+                    <target>10</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <artifactId>metering-sample</artifactId>
   <name>metering Sample</name>
 
   <dependencies>
     <dependency>
-      <groupId>com.amberflo.metering.java</groupId>
+      <groupId>io.amberflo</groupId>
       <artifactId>metering</artifactId>
       <version>1.0.0</version>
     </dependency>

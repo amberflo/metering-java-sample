@@ -13,7 +13,6 @@ import java.util.Map;
 
 import com.amberflo.metering.core.meter_message.Region;
 
-import static com.amberflo.metering.core.MeteringContext.flushAndClose;
 import static com.amberflo.metering.core.MeteringContext.metering;
 import static com.amberflo.metering.core.extensions.ServiceMetering.serviceMetering;
 import static com.amberflo.metering.core.extensions.UserMetering.userMetering;
@@ -30,7 +29,7 @@ import static com.amberflo.metering.core.extensions.UserMetering.userMetering;
  */
 public class MeteringExamples {
     private final static String METER_NAME = "TrancsactionCount";
-    private final static Double METER_VALUE = 3.55;
+    private final static int METER_VALUE = 3;
     private final static String USER_ID = "YWJjNDU2";
     private final static String USER_NAME = "Professor Albus Dumbledore";
     private final static String SERVICE_CALL = "process-request";
