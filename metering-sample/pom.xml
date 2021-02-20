@@ -22,9 +22,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>io.amberflo</groupId>
-      <artifactId>metering</artifactId>
-      <version>1.0.0</version>
+        <groupId>io.amberflo</groupId>
+        <artifactId>metering-java-client</artifactId>
+        <version>1.0.0.1</version>
     </dependency>
   </dependencies>
 
