@@ -29,14 +29,14 @@ Meters are being sent to the end-point (amberflo or std-out) in batches (a near 
 
 Comment:
 
-'isAsync' - this parameter tells the meter-client to have a designated thread for queueing and sending the meters. **The meter client isn't thread safe unless isAsync is set to true**.
+'isAsync' - This is actually an optional parameter (defaults to true). This parameter tells the meter-client to have a designated thread for queueing and sending the meters. **The meter client isn't thread safe unless isAsync is set to true**.
 
 
 #### For Prod
 ```
 {
   "clientType": "DirectClient",
-  "isAsync": true,
+  "maxAsyncQueyeSize": 20000,
   "params": {
     "maxDelayInSec": 0.5,
     "apiKey": "Y2hhbmdlbWU=",
@@ -48,10 +48,10 @@ Comment:
 ```
 
 Change the:
-1. **accountName** - to your amberfo's account number.
-2. **apiKey** - to your apikey decoded as a base64 string.
-3. **serviceName** - to your the name of your service. The service name will be added for all of your meters as an extra dimension.
-
+1. **accountName** - To your amberfo's account number.
+2. **apiKey** - To your apikey decoded as a base64 string.
+3. **serviceName** - To your the name of your service. The service name will be added for all of your meters as an extra dimension.
+4. **maxAsyncQueyeSize** - Discard it (optional Parameter default to 100,000), or change it to a value bigger than 1000. 
 
 ### Step 2: Define a 'metering_domain' System env
 By default, the metering client uses the 'dev-metering.json' for setting up the metering client. If you want to tell the
