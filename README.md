@@ -40,7 +40,7 @@ Comment:
   "params": {
     "maxDelayInSec": 0.5,
     "apiKey": "Y2hhbmdlbWU=",
-    "accountName": "demo", 
+    "accountName": "demoAccount", 
     "maxBatchSize": 10,
     "serviceName": "name"
   }
@@ -49,7 +49,7 @@ Comment:
 
 Change the:
 1. **accountName** - to your amberfo's account number.
-2. **apiKey** - to your password decoded as a base64 string.
+2. **apiKey** - to your apikey decoded as a base64 string.
 3. **serviceName** - to your the name of your service. The service name will be added for all of your meters as an extra dimension.
 
 
@@ -115,6 +115,19 @@ you will need to call 'flushAndClose' explicitly before exiting your app.
 ```
    MeteringContext.flushAndClose();
 ```
+
+### Step 5 (optional) - Add slf4j binding
+By default the metering-client will log all of the warnings and errors to `std-err`. If you want it to log these messages elsewhere, all you need to do is to add the a slf4j-binding JAR to your runtime dependencies (unless you allready have it there and then you are all set).
+
+For example, if you use:
+Logging System | Slf4j Binder  | maven
+-------------- | ------------- | -------------
+Log4j-2 | log4j-slf4j-impl | https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl
+log4j version 1.2 | slf4j-log4j12 | https://mvnrepository.com/artifact/org.slf4j/slf4j-log4j12
+java.util.logging (JUL) | slf4j-jdk14 | https://mvnrepository.com/artifact/org.slf4j/slf4j-jdk14
+
+More info about setting up slf4j at: http://www.slf4j.org/manual.html
+
 
 ## Detailed Examples
 See the following apps for more detailed examples and additional features:
