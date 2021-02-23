@@ -17,6 +17,7 @@
 
   <modules>
     <module>metering-sample</module>
+    <module>metering-cli</module>
   </modules>
 
   <issueManagement>
