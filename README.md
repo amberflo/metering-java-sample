@@ -39,8 +39,7 @@ Comment:
   "maxAsyncQueyeSize": 20000,
   "params": {
     "maxDelayInSec": 0.5,
-    "apiKey": "Y2hhbmdlbWU=",
-    "accountName": "demoAccount", 
+    "apiKey": "your-api-key",
     "maxBatchSize": 10,
     "serviceName": "name"
   }
@@ -48,10 +47,9 @@ Comment:
 ```
 
 Change the:
-1. **accountName** - To your amberfo's account number.
-2. **apiKey** - To your apikey decoded as a base64 string.
-3. **serviceName** - To your the name of your service. The service name will be added for all of your meters as an extra dimension.
-4. **maxAsyncQueyeSize** - Discard it (optional Parameter default to 100,000), or change it to a value bigger than 1000. 
+1. **apiKey** - To your amberflo's api-key string.
+2. **serviceName** - To your the name of your service. The service name will be added for all of your meters as an extra dimension.
+3. **maxAsyncQueyeSize** - Discard it (optional Parameter default to 100,000), or change it to a value bigger than 1000. 
 
 ### Step 2: Define a 'metering_domain' System env
 By default, the metering client uses the 'dev-metering.json' for setting up the metering client. If you want to tell the
