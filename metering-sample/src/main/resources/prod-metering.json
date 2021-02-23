@@ -3,7 +3,7 @@
   "maxAsyncQueyeSize": 20000,
   "params": {
     "maxDelayInSec": 0.5,
-    "apiKey": "e9c6a4fc-e275-4eda-b2f8-353ef196ddb7",
+    "apiKey": "your-app-key",
     "maxBatchSize": 10,
     "serviceName": "name"
   }
