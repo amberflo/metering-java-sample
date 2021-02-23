@@ -10,23 +10,23 @@ import java.util.Map;
 
 import static com.amberflo.metering.core.MeteringContext.metering;
 import static com.amberflo.metering.core.extensions.ServiceMetering.serviceMetering;
-import static com.amberflo.metering.core.extensions.UserMetering.userMetering;
+import static com.amberflo.metering.core.extensions.CustomerMetering.customerMetering;
 
 /**
  * This example shows how to use the {@link ThreadContext}.
  *
  * {@link ThreadContext} is great for setting-up common attributes (dimensions) that describe multiple related meters.
  *
- * For example, let's assume your service received a request from multiple identified users. The service runs every
- * request in it own thread. While processing each request you want all of the meters to record the user-id who
- * sent the request to the server. One option is to inject the user-id to all of the methods in your code that contains
- * metering logic. But that will be a lot of work and not a very nice code. Another option is to use
- * {@link ThreadContext} which lets you set up some common attributes such us user, session, or the service-call.
+ * For example, let's assume your service received a request from multiple identified customers. The service runs every
+ * request in it own thread. While processing each request you want all of the meters to record the customer-id who
+ * sent the request to the server. One option is to inject the customer-id to all of the methods in your code that
+ * contains metering logic. But that will be a lot of work and not a very nice code. Another option is to use
+ * {@link ThreadContext} which lets you set up some common attributes such us customer, session, or the service-call.
  * These attributes, are thread specific, and will be added to all of the meters in the context of usage.
  */
 public class ThreadContextExample {
     private final static String METER_NAME = "TrancsactionCount";
-    private final static String USER_ID = "YWJjNDU2";
+    private final static String CUSTOMER_ID = "YWJjNDU2";
     private final static String SERVICE_CALL = "processRequest";
     private final static String SERVICE_NAME = "myLambda";
 
@@ -38,9 +38,10 @@ public class ThreadContextExample {
         int meterNum = 0;
 
         try (final Metering metering = metering()) {
-            // Example 1 - set context for the user-id, service-call, and the session.
+            // Example 1 - set context for the customer-id, service-call, and the session.
             try(final ThreadContext context = new ThreadContext()) {
-                context.properties().setUserId(USER_ID).setServiceCall(SERVICE_CALL).setDimensionsMap(SESSION_INFO);
+                context.properties().setCustomerId(CUSTOMER_ID).setServiceCall(SERVICE_CALL)
+                        .setDimensionsMap(SESSION_INFO);
 
                 recordMeter(meterNum++);
             }
@@ -53,12 +54,12 @@ public class ThreadContextExample {
 
             // Example 3 - set up a session info and record 2 meters.
             try(final ThreadContext context = new ThreadContext()) {
-                context.properties().setUserId(USER_ID);
+                context.properties().setCustomerId(CUSTOMER_ID);
 
                 recordMeter(meterNum++);
-                // Once you set up the user-id, you don't need to provide it to the userMetering or serviceMetering
-                // Templates.
-                userMetering().signUp();
+                // Once you set up the customer-id, you don't need to provide it to the customerMetering or
+                // serviceMetering templates.
+                customerMetering().signUp();
                 serviceMetering().call(SERVICE_CALL);
             }
 

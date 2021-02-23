@@ -35,8 +35,8 @@ import com.amberflo.metering.core.clients.DirectMeteringClient;
  */
 public class MeteringInDevExample {
     private final static String METER_NAME = "TrancsactionCount";
-    private final static String USER_ID = "YWJjNDU2";
-    private final static String USER_NAME = "Professor Albus Dumbledore";
+    private final static String CUSTOMER_ID = "YWJjNDU2";
+    private final static String CUSTOMER_NAME = "Professor Albus Dumbledore";
     private final static LocalDateTime START_TIME = LocalDateTime.now();
     private final static Map<String, String> EXTRA_DIMENSIONS_MAP = null;
 
@@ -49,7 +49,7 @@ public class MeteringInDevExample {
         // Here we use the metering factory.
         try (final Metering metering = metering()) {
             for(int i = 1; i < 30; i++) {
-                metering.meter(USER_NAME, USER_ID, METER_NAME, i, START_TIME, EXTRA_DIMENSIONS_MAP);
+                metering.meter(CUSTOMER_NAME, CUSTOMER_ID, METER_NAME, i, START_TIME, EXTRA_DIMENSIONS_MAP);
             }
         }
     }

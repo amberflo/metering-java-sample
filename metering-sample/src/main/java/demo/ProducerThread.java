@@ -11,7 +11,7 @@ import java.util.Random;
  */
 class ProducerThread extends Thread {
     private final static String METER_NAME = "TrancsactionCount";
-    private final static String USER_NAME = "harry potter";
+    private final static String CUSTOMER_NAME = "harry potter";
     private final static String SERVICE_CALL = "process-request";
 
     final static int TEN_SECONDS = 10 * 1000;
@@ -33,8 +33,8 @@ class ProducerThread extends Thread {
         return MeterMessageBuilder
                 .createInstance(METER_NAME)
                 .setMeterValue(round*5.5)
-                .setUserId(String.valueOf(id))
-                .setUserName(USER_NAME)
+                .setCustomerId(String.valueOf(id))
+                .setCustomerName(CUSTOMER_NAME)
                 .setServiceCall(SERVICE_CALL + " " + id)
                 .build();
     }

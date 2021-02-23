@@ -87,25 +87,25 @@ Use the metering builder, factory or templates to send meters.
    final LocalDateTime time = LocalDateTime.now();
    final Map<String, String> extraDimensionsMap = null;
    
-   metering().meter("user_name", "user_id", "meter_name", meterValue, time, extraDimensionsMap);
+   metering().meter("customer_name", "customer_id", "meter_name", meterValue, time, extraDimensionsMap);
 ```
 
 **Templates**
 ```
    // Service call related meters.
-   serviceMetering().call("user_id", "service_call"); // The meter name will be 'Call' not "service_call"
-   serviceMetering().processingTime("user_id", "service_call", processingTimeMillis); // The meter name will be 'Call.processingTime'
+   serviceMetering().call("customer_id", "service_call"); // The meter name will be 'Call' not "service_call"
+   serviceMetering().processingTime("customer_id", "service_call", processingTimeMillis); // The meter name will be 'Call.processingTime'
 
-   // User related meters
-   userMetering().signUp("user_id");
-   userMetering().login("user_id");
+   // Customer related meters
+   customerMetering().signUp("customer_id");
+   customerMetering().login("customer_id");
 ```
 
 ### Step 4 - flush and close
 Unless you use the metering for a 'try with resources'
 ```
      try (final MeteringContext context = MeteringContext.getContext()) {
-         userMetering().signUp(USER_ID); // templates are just and abstraction layer on the top of the metering.
+         customerMetering().signUp(CUSTOMER_ID); // templates are just and abstraction layer on the top of the metering.
      }
 ```
 
@@ -136,6 +136,6 @@ See the following apps for more detailed examples and additional features:
 3. **MultiThreadExample** - In this example we simulated a multi-threads service. This example demonstrates that its 
    easy and safe to call the meter service from many threads.
 4. **ThreadContextExample** - This example shows how to define common attributes to be shared by many related meters 
-   (user id, session id, etc).
+   (customer id, session id, etc).
 
 
