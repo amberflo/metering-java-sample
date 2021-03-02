@@ -5,6 +5,7 @@ import com.amberflo.metering.core.meter_message.MeterMessage;
 import com.amberflo.metering.core.meter_message.MeterMessageBuilder;
 import com.amberflo.metering.core.meter_message.ThreadContext;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -59,8 +60,8 @@ public class ThreadContextExample {
                 recordMeter(meterNum++);
                 // Once you set up the customer-id, you don't need to provide it to the customerMetering or
                 // serviceMetering templates.
-                customerMetering().signUp();
-                serviceMetering().call(SERVICE_CALL);
+                customerMetering().signUp(LocalDateTime.now());
+                serviceMetering().call(SERVICE_CALL, LocalDateTime.now());
             }
 
 
@@ -77,7 +78,7 @@ public class ThreadContextExample {
         // There are all kind of ways to send meters to amberflo.
         // Here we chose to use the builder.
         final MeterMessage meter = MeterMessageBuilder
-                .createInstance(METER_NAME + " " + num)
+                .createInstance(METER_NAME + " " + num, LocalDateTime.now())
                 .build();
         metering().meter(meter);
     }

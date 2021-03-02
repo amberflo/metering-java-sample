@@ -75,7 +75,7 @@ Use the metering builder, factory or templates to send meters.
 **Builder**
 ```
    final MeterMessage meter = MeterMessageBuilder
-       .createInstance(METER_NAME)
+       .createInstance(METER_NAME, LocalDateTime.now())
        .setMeterValue(METER_VALUE)
        .build();
     metering().meter(meter);
@@ -93,19 +93,19 @@ Use the metering builder, factory or templates to send meters.
 **Templates**
 ```
    // Service call related meters.
-   serviceMetering().call("customer_id", "service_call"); // The meter name will be 'Call' not "service_call"
-   serviceMetering().processingTime("customer_id", "service_call", processingTimeMillis); // The meter name will be 'Call.processingTime'
+   serviceMetering().call("customer_id", "service_call", LocalDateTime.now()); // The meter name will be 'Call' not "service_call"
+   serviceMetering().processingTime("customer_id", "service_call", processingTimeMillis, LocalDateTime.now()); // The meter name will be 'Call.processingTime'
 
    // Customer related meters
-   customerMetering().signUp("customer_id");
-   customerMetering().login("customer_id");
+   customerMetering().signUp("customer_id", LocalDateTime.now());
+   customerMetering().login("customer_id", LocalDateTime.now());
 ```
 
 ### Step 4 - flush and close
 Unless you use the metering for a 'try with resources'
 ```
      try (final MeteringContext context = MeteringContext.getContext()) {
-         customerMetering().signUp(CUSTOMER_ID); // templates are just and abstraction layer on the top of the metering.
+         customerMetering().signUp(CUSTOMER_ID, METER_TIME); // templates are just and abstraction layer on the top of the metering.
      }
 ```
 

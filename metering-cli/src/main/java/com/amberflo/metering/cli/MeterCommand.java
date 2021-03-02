@@ -1,7 +1,6 @@
 package com.amberflo.metering.cli;
 
 import com.amberflo.metering.core.MeteringContext;
-import com.amberflo.metering.core.clients.AsyncMeteringClient;
 import com.amberflo.metering.core.meter_message.Domain;
 import com.amberflo.metering.core.meter_message.MeterMessage;
 import com.amberflo.metering.core.meter_message.MeterMessageBuilder;
@@ -12,6 +11,7 @@ import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.Callable;
 
 /**
@@ -58,11 +58,17 @@ public class MeterCommand implements Callable<Integer> {
     @Option(names = {"-v", "--meter_value"}, description = "The meter value")
     private Double value = null;
 
+    @Option(names = {"-t", "--time"}, description = "The meter UTC time in millis since epoch. Info regarding for " +
+            "how to come up with this value at: " +
+            "1. https://currentmillis.com/ " +
+            "2. https://unix.stackexchange.com/questions/69322/how-to-get-milliseconds-since-unix-epoch")
+    private LocalDateTime time = null;
+
     @Override
     public Integer call() {
         try (final MeteringContext context = MeteringContext.createOrReplaceContext(appKey, CLI, DOMAIN,
                 REGION, MAX_SECOND_BETWEEN_WRITES, MAX_BATCH_SIZE)) {
-            final MeterMessageBuilder builder = MeterMessageBuilder.createInstance(meterName)
+            final MeterMessageBuilder builder = MeterMessageBuilder.createInstance(meterName, time)
                     .setCustomerId(customerId).setCustomerName(customerName);
 
             if (value != null) {
@@ -86,7 +92,10 @@ public class MeterCommand implements Callable<Integer> {
     }
 
     public static void main(final String... args) {
-        int exitCode = new CommandLine(new MeterCommand()).execute(args);
+        int exitCode =
+                new CommandLine(new MeterCommand())
+                        .registerConverter(LocalDateTime.class, new LocalDateTimeConverter())
+                .execute(args);
         System.exit(exitCode);
     }
 }

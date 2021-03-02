@@ -4,6 +4,7 @@ import com.amberflo.metering.core.MeteringContext;
 import com.amberflo.metering.core.meter_message.MeterMessage;
 import com.amberflo.metering.core.meter_message.MeterMessageBuilder;
 
+import java.time.LocalDateTime;
 import java.util.Random;
 
 /**
@@ -31,7 +32,7 @@ class ProducerThread extends Thread {
     private MeterMessage createMeterMessage(final int round) {
         // This is how creating a CUSTOM meter looks like.
         return MeterMessageBuilder
-                .createInstance(METER_NAME)
+                .createInstance(METER_NAME, LocalDateTime.now())
                 .setMeterValue(round*5.5)
                 .setCustomerId(String.valueOf(id))
                 .setCustomerName(CUSTOMER_NAME)
