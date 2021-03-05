@@ -32,10 +32,8 @@ class ProducerThread extends Thread {
     private MeterMessage createMeterMessage(final int round) {
         // This is how creating a CUSTOM meter looks like.
         return MeterMessageBuilder
-                .createInstance(METER_NAME, LocalDateTime.now())
+                .createInstance(METER_NAME, LocalDateTime.now(), String.valueOf(id), CUSTOMER_NAME)
                 .setMeterValue(round*5.5)
-                .setCustomerId(String.valueOf(id))
-                .setCustomerName(CUSTOMER_NAME)
                 .setServiceCall(SERVICE_CALL + " " + id)
                 .build();
     }

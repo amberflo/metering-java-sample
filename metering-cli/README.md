@@ -2,8 +2,8 @@
 A very simple cli tool for calling the Amberflo.io java client. The tool includes the following params:
 1. meter_name - required.
 2. app_key - required.
-3. customer_id - optional.
-4. customer_name - optional.
+3. customer_id - required.
+4. customer_name - required.
 5. meter_value - optional (default to 1).
 6. as_error - optional.
 

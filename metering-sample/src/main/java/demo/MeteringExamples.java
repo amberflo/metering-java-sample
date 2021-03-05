@@ -59,7 +59,8 @@ public class MeteringExamples {
 
         // Comment: 'Metering' is autoClosable - so instead of step 2 and 3, you can also send meters this way:
         try (final MeteringContext context = MeteringContext.getContext()) {
-            customerMetering().signUp(CUSTOMER_ID, EVENT_TIME); // templates are just and abstraction layer on the top of the metering.
+            // templates are just and abstraction layer on the top of the metering.
+            customerMetering().signUp(CUSTOMER_ID, CUSTOMER_NAME, EVENT_TIME);
         }
     }
 
@@ -75,7 +76,7 @@ public class MeteringExamples {
         // requires more effort on your side, and might be more errors prone than other options.
         // Use it only if you need a completely custom meter.
         final MeterMessage meter = MeterMessageBuilder
-                .createInstance(METER_NAME, EVENT_TIME)
+                .createInstance(METER_NAME, EVENT_TIME, CUSTOMER_ID, CUSTOMER_NAME)
                 .setMeterValue(METER_VALUE)
                 .build();
         metering().meter(meter);
@@ -87,8 +88,8 @@ public class MeteringExamples {
         // Option 2: Create a custom message with a factory
         // A factory is a bit more structured way of creating a meter but less flexible. It lets you send
         // a meter which contains the:
-        // a. The customer name and id - Optional. These are the details of your customer who made a call to your
-        //    service let's say.
+        // a. The customer name and id - Mandatory (unless you invoke the method within a thread context with
+        //    customer info). These are the details of your customer who made a call to your service let's say.
         // b. The meter name and value - Required.
         // c. The start_time - Optional. this can be a start time of a call, or the event time which is relevant
         //    for the meter. If the start time is null then the event time will by the current time when sending
@@ -96,7 +97,7 @@ public class MeteringExamples {
         // d. The extra dimensions map - Optional. this is just a map of string keys to string values containing
         //    important dimensions.
         metering().meter(CUSTOMER_NAME, CUSTOMER_ID, METER_NAME, METER_VALUE, EVENT_TIME, EXTRA_DIMENSIONS_MAP);
-        metering().meter(null, null, METER_NAME, METER_VALUE, EVENT_TIME, null);
+        metering().meter(CUSTOMER_NAME, CUSTOMER_ID, METER_NAME, METER_VALUE, EVENT_TIME, null);
 
 
         // Option 3: Templates
@@ -111,21 +112,21 @@ public class MeteringExamples {
 
         // Option 3.1 - Service-Metering:
         // use the serviceMetering to create
-        serviceMetering().call(CUSTOMER_ID, SERVICE_CALL, EVENT_TIME);
-        serviceMetering().processingTime(CUSTOMER_ID, SERVICE_CALL, PROCESSING_TIME_MILLIS, EVENT_TIME);
-        serviceMetering().dataUsage(CUSTOMER_ID, SERVICE_CALL, MB_USED, EVENT_TIME);
+        serviceMetering().call(CUSTOMER_ID, CUSTOMER_NAME,  SERVICE_CALL, EVENT_TIME);
+        serviceMetering().processingTime(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, PROCESSING_TIME_MILLIS, EVENT_TIME);
+        serviceMetering().dataUsage(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, MB_USED, EVENT_TIME);
         // See the method below for more advanced\detailed examples of using the meters.
         serviceMeteringAdvanced();
 
         // Option 3.2 - Customer-Metering.
         // This templates allow you to create customer (client) related meters.
-        customerMetering().signUp(CUSTOMER_ID, EVENT_TIME);
-        customerMetering().onboarded(CUSTOMER_ID, EVENT_TIME);
-        customerMetering().offboarded(CUSTOMER_ID, EVENT_TIME);
-        customerMetering().login(CUSTOMER_ID, EVENT_TIME);
+        customerMetering().signUp(CUSTOMER_ID, CUSTOMER_NAME, EVENT_TIME);
+        customerMetering().onboarded(CUSTOMER_ID, CUSTOMER_NAME, EVENT_TIME);
+        customerMetering().offboarded(CUSTOMER_ID, CUSTOMER_NAME, EVENT_TIME);
+        customerMetering().login(CUSTOMER_ID, CUSTOMER_NAME, EVENT_TIME);
         // This meter described a case a customer registered to your service, but you rejected the registration
         // (false-data or a malicious customer for example).
-        customerMetering().onboardingRejected(CUSTOMER_ID, EVENT_TIME);
+        customerMetering().onboardingRejected(CUSTOMER_ID, CUSTOMER_NAME, EVENT_TIME);
     }
 
     private static void customBuilderAdvanced() {
@@ -137,7 +138,7 @@ public class MeteringExamples {
         sessionInfo.put("state", "WA");
 
         final MeterMessage meter = MeterMessageBuilder
-                .createInstance(METER_NAME, EVENT_TIME)
+                .createInstance(METER_NAME, EVENT_TIME, CUSTOMER_ID, CUSTOMER_NAME)
                 // meter value is actually optional param. If not set the the meter value will be 1.
                 .setMeterValue(METER_VALUE)
                 // if you want to capture the end time of the meter event (now), and measure the duration of
@@ -147,9 +148,6 @@ public class MeteringExamples {
                 // meter type isn't currently in use by amberflo. Yet if you feel the need to have it
                 // use it ... we will notice that and adapt our system accordingly.
                 .setMeterType("millis")
-                // Set up customer related data.
-                .setCustomerId(CUSTOMER_ID)
-                .setCustomerName(CUSTOMER_NAME)
                 // Set up service related data.
                 // Service name is a param to the 'DirectMeteringClient', nevertheless, you can override it here.
                 .setServiceName(SERVICE_NAME)
@@ -193,28 +191,28 @@ public class MeteringExamples {
      */
     private static void serviceMeteringAdvanced() {
         // 'call' will produce a meter called "Call" and it can be used in many ways:
-        serviceMetering().call(CUSTOMER_ID, SERVICE_CALL, EVENT_TIME);
-        serviceMetering().call(CUSTOMER_ID, SERVICE_CALL, ERROR_FLAG, EVENT_TIME); // if you want to mark it as an error
-        serviceMetering().call(CUSTOMER_ID, SERVICE_CALL, ERROR_FLAG, IllegalAccessError.class, EVENT_TIME); // error + error type
+        serviceMetering().call(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, EVENT_TIME);
+        serviceMetering().call(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, ERROR_FLAG, EVENT_TIME); // if you want to mark it as an error
+        serviceMetering().call(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, ERROR_FLAG, IllegalAccessError.class, EVENT_TIME); // error + error type
         // The SERVICE_CALL in the example above isn't the meter name but a dimension.
 
         // If you find it more convenient you can also record a service call using
-        serviceMetering().callCompleted(CUSTOMER_ID, SERVICE_CALL, EVENT_TIME); // To mark the end of a call that completed successfully.
-        serviceMetering().callError(CUSTOMER_ID, SERVICE_CALL, EVENT_TIME); // To mark the end of a call that completed with an error.
+        serviceMetering().callCompleted(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, EVENT_TIME); // To mark the end of a call that completed successfully.
+        serviceMetering().callError(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, EVENT_TIME); // To mark the end of a call that completed with an error.
         // We will see soon how these can be used.
 
 
         // 'callStarted' as the name suggests, measure an event of start handling a service call regardless of the
         // results (the call completed successfully or not).
-        serviceMetering().callStarted(CUSTOMER_ID, SERVICE_CALL, EVENT_TIME);
+        serviceMetering().callStarted(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, EVENT_TIME);
 
 
         // 'processingTime' - measures the time it took to process the call in millis.
-        serviceMetering().processingTime(CUSTOMER_ID, SERVICE_CALL, PROCESSING_TIME_MILLIS, EVENT_TIME);
+        serviceMetering().processingTime(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, PROCESSING_TIME_MILLIS, EVENT_TIME);
 
 
         // 'dataUsage' - as the name suggests, measures the data returned to the client or used by the call in Mb.
-        serviceMetering().dataUsage(CUSTOMER_ID, SERVICE_CALL, MB_USED, EVENT_TIME);
+        serviceMetering().dataUsage(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, MB_USED, EVENT_TIME);
 
 
         // Examples of using multiple of the calls above:
@@ -235,21 +233,21 @@ public class MeteringExamples {
         final LocalDateTime startTime = LocalDateTime.now();
         LocalDateTime endTime = startTime;
         try {
-            serviceMetering().callStarted(CUSTOMER_ID, SERVICE_CALL, startTime);
+            serviceMetering().callStarted(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, startTime);
 
             runnable.run();
 
             endTime = LocalDateTime.now();
-            serviceMetering().callCompleted(CUSTOMER_ID, SERVICE_CALL, endTime);
+            serviceMetering().callCompleted(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, endTime);
         } catch (final Exception e) {
             endTime = LocalDateTime.now();
-            serviceMetering().callError(CUSTOMER_ID, SERVICE_CALL, e.getClass(), endTime);
+            serviceMetering().callError(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, e.getClass(), endTime);
         } finally {
             final long durationInMillis  =
                     endTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() -
                         startTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
 
-            serviceMetering().processingTime(CUSTOMER_ID, SERVICE_CALL, durationInMillis, endTime);
+            serviceMetering().processingTime(CUSTOMER_ID, CUSTOMER_NAME, SERVICE_CALL, durationInMillis, endTime);
         }
     }
 }

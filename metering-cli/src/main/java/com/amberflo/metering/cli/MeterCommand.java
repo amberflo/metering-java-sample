@@ -17,8 +17,8 @@ import java.util.concurrent.Callable;
 /**
  * This is a very basic command line tool to help send basic meters which includes the following params:
  * 1. meter_name - required.
- * 2. customer_id - optional.
- * 3. customer_name - optional.
+ * 2. customer_id - required.
+ * 3. customer_name - Required.
  * 4. meter_value - optional (default to 1).
  * 5. as_error - optional.
  *
@@ -68,8 +68,8 @@ public class MeterCommand implements Callable<Integer> {
     public Integer call() {
         try (final MeteringContext context = MeteringContext.createOrReplaceContext(appKey, CLI, DOMAIN,
                 REGION, MAX_SECOND_BETWEEN_WRITES, MAX_BATCH_SIZE)) {
-            final MeterMessageBuilder builder = MeterMessageBuilder.createInstance(meterName, time)
-                    .setCustomerId(customerId).setCustomerName(customerName);
+            final MeterMessageBuilder builder = MeterMessageBuilder
+                    .createInstance(meterName, time, customerId, customerName);
 
             if (value != null) {
                 builder.setMeterValue(value);
