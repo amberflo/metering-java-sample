@@ -40,22 +40,39 @@ public class ThreadContextExample {
         int meterNum = 0;
 
         try (final Metering metering = metering()) {
-            // Example 1 - set context for the customer-id, customer-name, service-call, and the session.
-            // The only way to set the customer info not as part of the context is by calling "setCustomerInfo".
+            // Example 1 - using threadContext explicitly (not in the scope of try-with-resources)
+            // The thread context is relevant from the point you defined it to the point you close it.
+            // Also notice that in this example we set context for the customer-id, customer-name, service-call,
+            // and the session. The only way to set the customer info not as part of the context is by calling
+            // "setCustomerInfo".
+            final ThreadContext threadContext = new ThreadContext();
+            try {
+                threadContext.setCustomerInfo(CUSTOMER_ID, CUSTOMER_NAME)
+                        .properties().setServiceCall(SERVICE_CALL).setDimensionsMap(SESSION_INFO);
+
+                recordMeterWhenCustomerContext(meterNum++);
+            } finally {
+                threadContext.close();
+            }
+
+
+            // Example 2 - try-with-resources
+            // (https://docs.oracle.com/javase/tutorial/essential/exceptions/tryResourceClose.html)
+            // The thread context is auto-closable so you can use it in a context of a 'try with resource'.
+            // With try-with-resources we can write the same logic as the logic about using a more precise syntax.
             try(final ThreadContext context = new ThreadContext()) {
                 context.setCustomerInfo(CUSTOMER_ID, CUSTOMER_NAME)
                         .properties().setServiceCall(SERVICE_CALL).setDimensionsMap(SESSION_INFO);
 
                 recordMeterWhenCustomerContext(meterNum++);
             }
-            // Notice, that the thread context is auto-closable so you can use it in a context of a 'try with resource'.
 
 
-            // Example 2 - no context.
+            // Example 3 - no context.
             // Once you are out of the context, the new meters won't have any of the previous context attributes.
             recordNotInCusomerContext(meterNum++);
 
-            // Example 3 - set up a session info and record 2 meters.
+            // Example 4 - set up a session info and record 2 meters.
             try(final ThreadContext context = new ThreadContext()) {
                 context.setCustomerInfo(CUSTOMER_ID, CUSTOMER_NAME).properties();
 
@@ -67,7 +84,7 @@ public class ThreadContextExample {
             }
 
 
-            // Example 4 - run from a different thread, and from the current thread.
+            // Example 5 - run from a different thread, and from the current thread.
             final var worker = new ProducerThreadWithContext();
             worker.run();
             recordNotInCusomerContext(meterNum++);
