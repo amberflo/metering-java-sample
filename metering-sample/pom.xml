@@ -21,11 +21,11 @@
   <name>metering Sample</name>
 
   <dependencies>
-    <dependency>
-        <groupId>io.amberflo</groupId>
-        <artifactId>metering-java-client</artifactId>
-        <version>1.0.0.3</version>
-    </dependency>
+      <dependency>
+          <groupId>io.amberflo</groupId>
+          <artifactId>metering-java-client</artifactId>
+          <version>1.1.0</version>
+      </dependency>
   </dependencies>
 
 </project>

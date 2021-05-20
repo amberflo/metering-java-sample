@@ -3,13 +3,13 @@ package demo;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-import static com.amberflo.metering.core.MeteringContext.metering;
+import static com.amberflo.metering.ingest.MeteringContext.metering;
 
-import com.amberflo.metering.core.Metering;
-import com.amberflo.metering.core.MeteringContext;
-import com.amberflo.metering.core.meter_message.Domain;
-import com.amberflo.metering.core.clients.StandardOutputMeteringClient;
-import com.amberflo.metering.core.clients.DirectMeteringClient;
+import com.amberflo.metering.ingest.Metering;
+import com.amberflo.metering.ingest.MeteringContext;
+import com.amberflo.metering.ingest.meter_message.Domain;
+import com.amberflo.metering.ingest.clients.StandardOutputMeteringClient;
+import com.amberflo.metering.ingest.clients.DirectMeteringClient;
 
 /**
  * This example came to describe how to set up the metering client config for different domains. As part of that we
@@ -36,7 +36,6 @@ import com.amberflo.metering.core.clients.DirectMeteringClient;
 public class MeteringInDevExample {
     private final static String METER_NAME = "TrancsactionCount";
     private final static String CUSTOMER_ID = "YWJjNDU2";
-    private final static String CUSTOMER_NAME = "Professor Albus Dumbledore";
     private final static LocalDateTime START_TIME = LocalDateTime.now();
     private final static Map<String, String> EXTRA_DIMENSIONS_MAP = null;
 
@@ -49,7 +48,7 @@ public class MeteringInDevExample {
         // Here we use the metering factory.
         try (final Metering metering = metering()) {
             for(int i = 1; i < 30; i++) {
-                metering.meter(CUSTOMER_NAME, CUSTOMER_ID, METER_NAME, i, START_TIME, EXTRA_DIMENSIONS_MAP);
+                metering.meter(CUSTOMER_ID, METER_NAME, i, START_TIME, EXTRA_DIMENSIONS_MAP);
             }
         }
     }

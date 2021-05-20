@@ -1,17 +1,17 @@
 package demo;
 
-import com.amberflo.metering.core.Metering;
-import com.amberflo.metering.core.meter_message.MeterMessage;
-import com.amberflo.metering.core.meter_message.MeterMessageBuilder;
-import com.amberflo.metering.core.meter_message.ThreadContext;
+import com.amberflo.metering.ingest.Metering;
+import com.amberflo.metering.ingest.meter_message.MeterMessage;
+import com.amberflo.metering.ingest.meter_message.MeterMessageBuilder;
+import com.amberflo.metering.ingest.meter_message.ThreadContext;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.amberflo.metering.core.MeteringContext.metering;
-import static com.amberflo.metering.core.extensions.ServiceMetering.serviceMetering;
-import static com.amberflo.metering.core.extensions.CustomerMetering.customerMetering;
+import static com.amberflo.metering.ingest.MeteringContext.metering;
+import static com.amberflo.metering.ingest.extensions.ServiceMetering.serviceMetering;
+import static com.amberflo.metering.ingest.extensions.CustomerMetering.customerMetering;
 
 /**
  * This example shows how to use the {@link ThreadContext}.
@@ -28,7 +28,6 @@ import static com.amberflo.metering.core.extensions.CustomerMetering.customerMet
 public class ThreadContextExample {
     private final static String METER_NAME = "TrancsactionCount";
     private final static String CUSTOMER_ID = "YWJjNDU2";
-    private final static String CUSTOMER_NAME = "Rolling Stones";
     private final static String SERVICE_CALL = "processRequest";
     private final static String SERVICE_NAME = "myLambda";
 
@@ -47,7 +46,7 @@ public class ThreadContextExample {
             // "setCustomerInfo".
             final ThreadContext threadContext = new ThreadContext();
             try {
-                threadContext.setCustomerInfo(CUSTOMER_ID, CUSTOMER_NAME)
+                threadContext.setCustomerInfo(CUSTOMER_ID)
                         .properties().setServiceCall(SERVICE_CALL).setDimensionsMap(SESSION_INFO);
 
                 recordMeterWhenCustomerContext(meterNum++);
@@ -61,7 +60,7 @@ public class ThreadContextExample {
             // The thread context is auto-closable so you can use it in a context of a 'try with resource'.
             // With try-with-resources we can write the same logic as the logic about using a more precise syntax.
             try(final ThreadContext context = new ThreadContext()) {
-                context.setCustomerInfo(CUSTOMER_ID, CUSTOMER_NAME)
+                context.setCustomerInfo(CUSTOMER_ID)
                         .properties().setServiceCall(SERVICE_CALL).setDimensionsMap(SESSION_INFO);
 
                 recordMeterWhenCustomerContext(meterNum++);
@@ -74,7 +73,7 @@ public class ThreadContextExample {
 
             // Example 4 - set up a session info and record 2 meters.
             try(final ThreadContext context = new ThreadContext()) {
-                context.setCustomerInfo(CUSTOMER_ID, CUSTOMER_NAME).properties();
+                context.setCustomerInfo(CUSTOMER_ID).properties();
 
                 recordMeterWhenCustomerContext(meterNum++);
                 // Once you set up the customer-id, you don't need to provide it to the customerMetering or
@@ -109,7 +108,7 @@ public class ThreadContextExample {
         final MeterMessage meter = MeterMessageBuilder
                 // If we aren't in scope of a context with customer info, we must call 'createInstance' or
                 // else we will get an exception.
-                .createInstance(METER_NAME + " " + num, LocalDateTime.now(), CUSTOMER_ID, CUSTOMER_NAME)
+                .createInstance(METER_NAME + " " + num, LocalDateTime.now(), CUSTOMER_ID)
                 .build();
         metering().meter(meter);
     }

@@ -75,7 +75,7 @@ Use the metering builder, factory or templates to send meters.
 **Builder**
 ```
    final MeterMessage meter = MeterMessageBuilder
-       .createInstance(METER_NAME, LocalDateTime.now(), CUSTOMER_ID, CUSTOMER_NAME)
+       .createInstance(METER_NAME, LocalDateTime.now(), CUSTOMER_ID)
          .setServiceCall(SERVICE_CALL_NAME)
          .setMeterValue(METER_VALUE)
          .build();
@@ -88,28 +88,28 @@ Use the metering builder, factory or templates to send meters.
    final LocalDateTime time = LocalDateTime.now();
    final Map<String, String> extraDimensionsMap = null;
    
-   metering().meter("customer_name", "customer_id", "meter_name", meterValue, time, extraDimensionsMap);
+   metering().meter("customer_id", "meter_name", meterValue, time, extraDimensionsMap);
 ```
 
 **Templates**
 ```
    // Service call related meters.
-   serviceMetering().call("customer_id", "customer_name", "service_call", LocalDateTime.now()); // The meter name will be 'Call' not "service_call"
-   serviceMetering().processingTime("customer_id", "customer_name", "service_call", processingTimeMillis, LocalDateTime.now()); // The meter name will be 'Call.processingTime'
+   serviceMetering().call("customer_id", "service_call", LocalDateTime.now()); // The meter name will be 'Call' not "service_call"
+   serviceMetering().processingTime("customer_id", "service_call", processingTimeMillis, LocalDateTime.now()); // The meter name will be 'Call.processingTime'
 
    // Customer related meters
-   customerMetering().signUp("customer_id", "customer_name", LocalDateTime.now());
-   customerMetering().login("customer_id", "customer_name", LocalDateTime.now());
+   customerMetering().signUp("customer_id", LocalDateTime.now());
+   customerMetering().login("customer_id", LocalDateTime.now());
 ```
 
-(see **ThreadContextExample** example for more info about how you can set up the customer name and id as a context,
+(see **ThreadContextExample** example for more info about how you can set up the customer id as a context,
 so you won't have to provide it each time)
 
 ### Step 4 - flush and close
 Unless you use the metering from a 'try with resources'
 ```
      try (final MeteringContext context = MeteringContext.getContext()) {
-         customerMetering().signUp(CUSTOMER_ID, CUSTOMER_NAME, METER_TIME); // templates are just and abstraction layer on the top of the metering.
+         customerMetering().signUp(CUSTOMER_ID, METER_TIME); // templates are just and abstraction layer on the top of the metering.
      }
 ```
 

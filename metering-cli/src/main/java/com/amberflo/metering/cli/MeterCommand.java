@@ -1,10 +1,10 @@
 package com.amberflo.metering.cli;
 
-import com.amberflo.metering.core.MeteringContext;
-import com.amberflo.metering.core.meter_message.Domain;
-import com.amberflo.metering.core.meter_message.MeterMessage;
-import com.amberflo.metering.core.meter_message.MeterMessageBuilder;
-import com.amberflo.metering.core.meter_message.Region;
+import com.amberflo.metering.ingest.MeteringContext;
+import com.amberflo.metering.ingest.meter_message.Domain;
+import com.amberflo.metering.ingest.meter_message.MeterMessage;
+import com.amberflo.metering.ingest.meter_message.MeterMessageBuilder;
+import com.amberflo.metering.ingest.meter_message.Region;
 import com.google.gson.Gson;
 import picocli.CommandLine;
 
@@ -18,9 +18,8 @@ import java.util.concurrent.Callable;
  * This is a very basic command line tool to help send basic meters which includes the following params:
  * 1. meter_name - required.
  * 2. customer_id - required.
- * 3. customer_name - Required.
- * 4. meter_value - optional (default to 1).
- * 5. as_error - optional.
+ * 3. meter_value - optional (default to 1).
+ * 4. as_error - optional.
  *
  * You also need to provide your 'app_key' in order to identify yourself with Amberflo.
  *
@@ -47,10 +46,6 @@ public class MeterCommand implements Callable<Integer> {
             "your service)")
     private String customerId = null;
 
-    @Option(names = {"-n", "--customer_name"}, description = "The customer name (the client who made the call to " +
-            "your service)")
-    private String customerName = null;
-
     @Option(names = {"-e", "--as_error"}, description = "If provided and true, then this meter will be marked as an" +
             "error/failure related meter")
     private Boolean asError = false;
@@ -69,7 +64,7 @@ public class MeterCommand implements Callable<Integer> {
         try (final MeteringContext context = MeteringContext.createOrReplaceContext(appKey, CLI, DOMAIN,
                 REGION, MAX_SECOND_BETWEEN_WRITES, MAX_BATCH_SIZE)) {
             final MeterMessageBuilder builder = MeterMessageBuilder
-                    .createInstance(meterName, time, customerId, customerName);
+                    .createInstance(meterName, time, customerId);
 
             if (value != null) {
                 builder.setMeterValue(value);

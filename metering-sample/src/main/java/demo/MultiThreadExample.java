@@ -1,7 +1,7 @@
 package demo;
 
-import com.amberflo.metering.core.MeteringContext;
-import com.amberflo.metering.core.meter_message.Domain;
+import com.amberflo.metering.ingest.MeteringContext;
+import com.amberflo.metering.ingest.meter_message.Domain;
 
 import java.util.LinkedList;
 import java.util.List;
