@@ -87,8 +87,8 @@ public class MeteringExamples {
         // Option 2: Create a custom message with a factory
         // A factory is a bit more structured way of creating a meter but less flexible. It lets you send
         // a meter which contains the:
-        // a. The customer name and id - Mandatory (unless you invoke the method within a thread context with
-        //    customer info). These are the details of your customer who made a call to your service let's say.
+        // a. The customer id - Mandatory (unless you invoke the method within a thread context with
+        //    customer info). This is the id of your customer who made a call to your service (let's say).
         // b. The meter name and value - Required.
         // c. The start_time - Optional. this can be a start time of a call, or the event time which is relevant
         //    for the meter. If the start time is null then the event time will by the current time when sending

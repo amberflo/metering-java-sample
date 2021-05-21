@@ -41,9 +41,8 @@ public class ThreadContextExample {
         try (final Metering metering = metering()) {
             // Example 1 - using threadContext explicitly (not in the scope of try-with-resources)
             // The thread context is relevant from the point you defined it to the point you close it.
-            // Also notice that in this example we set context for the customer-id, customer-name, service-call,
-            // and the session. The only way to set the customer info not as part of the context is by calling
-            // "setCustomerInfo".
+            // Also notice that in this example we set context for the customer-id, service-call, and the session.
+            // The only way to set the customer info not as part of the context is by calling "setCustomerInfo".
             final ThreadContext threadContext = new ThreadContext();
             try {
                 threadContext.setCustomerInfo(CUSTOMER_ID)
