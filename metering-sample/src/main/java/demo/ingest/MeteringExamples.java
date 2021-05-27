@@ -1,4 +1,4 @@
-package demo;
+package demo.ingest;
 
 import com.amberflo.metering.ingest.MeteringContext;
 import com.amberflo.metering.ingest.extensions.ServiceMetering;
@@ -42,7 +42,7 @@ public class MeteringExamples {
     private final static Map<String, String> EXTRA_DIMENSIONS_MAP = null;
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) {
         // Step 1 - setting up the domain (prod dev)
         // You need to set the "metering domain" system env var to prod.
         System.setProperty(MeteringContext.METERING_DOMAIN, Domain.Prod.name());

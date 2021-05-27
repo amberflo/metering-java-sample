@@ -1,4 +1,4 @@
-package demo;
+package demo.ingest;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -39,7 +39,7 @@ public class MeteringInDevExample {
     private final static LocalDateTime START_TIME = LocalDateTime.now();
     private final static Map<String, String> EXTRA_DIMENSIONS_MAP = null;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         // To log in dev you don't really need to set anything. Yet if you want you can call:
         System.setProperty(MeteringContext.METERING_DOMAIN, Domain.Dev.toString());
         // To set 'dev' as the current domain.

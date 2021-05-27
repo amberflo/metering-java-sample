@@ -1,4 +1,4 @@
-package demo;
+package demo.ingest;
 
 import com.amberflo.metering.ingest.Metering;
 import com.amberflo.metering.ingest.meter_message.MeterMessage;
@@ -35,7 +35,7 @@ public class ThreadContextExample {
         put("session", "789");
     }};
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         int meterNum = 0;
 
         try (final Metering metering = metering()) {

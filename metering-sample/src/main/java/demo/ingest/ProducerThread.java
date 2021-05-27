@@ -1,4 +1,4 @@
-package demo;
+package demo.ingest;
 
 import com.amberflo.metering.ingest.MeteringContext;
 import com.amberflo.metering.ingest.meter_message.MeterMessage;

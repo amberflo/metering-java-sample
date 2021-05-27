@@ -1,7 +1,7 @@
 # Metering Sample
 This repo describes in details how to setup the metering-java client, and how interact with it.
 
-## Detailed Examples
+## Ingest - Detailed Examples
 See the following apps for more detailed examples and additional features:
 1. **MeteringExamples** - Describes the basic steps of using the meter client and sending meters, and the different 
    ways you can call the metering-service (not including thread-context).
@@ -12,4 +12,8 @@ See the following apps for more detailed examples and additional features:
 4. **ThreadContextExample** - This example shows how to define common attributes to be shared by many related meters 
    (user id, session id, etc).
 
+## Usage - Detailed Examples
+1. **UsageExample** - Describes the main use-cases and rules of the 'Usage-Api'.
 
+## Customer-Details - Detailed Examples
+1. **UsageExample** - An example app which shows how to interact with the customer-details api.

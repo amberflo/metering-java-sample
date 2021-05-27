@@ -1,7 +1,12 @@
 # metering-java-sample
 This repo describes in details how to setup the metering-java client, and how interact with it.
 
-## Basic guidelines
+The client contains 3 main apis:
+1. Ingest - allows you to send meter to Amberflo.
+2. Usage - allows you to query Amberflo for statistics regarding your meters.
+3. Customer-Details - allows you to easily define your customers in Amberflo.
+
+## Ingest - Basic guidelines
 ### Step 1: Setup Dev/Prod client configs
 Add two files to the 'Resources' folder of your project:
 1. dev-metering.json
@@ -131,15 +136,122 @@ java.util.logging (JUL) | slf4j-jdk14 | https://mvnrepository.com/artifact/org.s
 More info about setting up slf4j at: http://www.slf4j.org/manual.html
 
 
+## Usage - Basic guidelines
+Usage api supports 3 types of requests:
+1. **All** - Simple statistics for all the official meters in your account use the 'all' api.
+2. **Get** - Custom-query for a specific meter.
+3. **Batch** - A batch of custom-queries.
+
+Below are the basic steps for creating a usage request for the different apis, and a short description of the response.
+For more details regarding how to query the usage api, please refer to the actual examples.
+
+### Step 1 - create the usage client
+Have code similar to:
+```
+        final String appKey = System.getProperty("AMBERFLO_APP_KEY");
+        final UsageClient usageClient = new UsageClient(appKey);
+```
+
+### Step 2 - create a request
+For the 'All' api, create a **AllMetersAggregationsRequest** as follows:
+
+```
+        final TimeRange timeRange = TimeRangeFactory.truncatedLastDays(4);
+        final AllMetersAggregationsRequest allRequest =
+                AllMetersAggregationsRequestBuilder.instance(timeRange)
+                        .setTimeGroupingInterval(AggregationInterval.DAY).build();
+```
+
+For the 'Get' api create a **MeterAggregationMetadata** request:
+```
+         final TimeRange timeRange = TimeRangeFactory.truncatedLastDays(4);
+         final MeterAggregationMetadata getRequest =
+                 MeterAggregationMetadataBuilder.instance(meterApiName, AggregationType.SUM, timeRange)
+                         .setTimeGroupingInterval(AggregationInterval.DAY)
+                         .setGroupBy(List.of(CUSTOMER_ID_FIELD))
+                         .setFilter(Map.of("customerTier", List.of("Premium", "Gold"), "country", List.of("US")))
+                         .setTake(new Take(5, !ASCENDING))
+                         .build();
+```
+
+
+And for the 'Batch' api create a list of **MeterAggregationMetadata** requests.
+
+### Step 2 - Send the request to Amberflo
+After creating the request input just send it to amberflo:
+
+```
+       final List<DetailedMeterAggregation> allResults = usageClient.getAll(allRequest);
+       final DetailedMeterAggregation getResult = usageClient.get(getRequest);
+       final List<DetailedMeterAggregation> batchResults = usageClient.getBatch(List.of(getRequest));
+```
+
+As you can see in all cases we get an object or a list of **DetailedMeterAggregation**. Each 'DetailedMeterAggregation'
+contains statistics for a single meter (per the specification of the request), and it contains the following fields:
+
+```
+   public class DetailedMeterAggregation {
+       private final MeterAggregationMetadata metadata;
+       private final List<Long> secondsSinceEpochIntervals;
+       private final List<DetailedMeterAggregationGroup> clientMeters;
+   
+       public static class DetailedMeterAggregationGroup implements Comparable<DetailedMeterAggregationGroup> {
+           private GroupInfo group;
+           private Double groupValue;
+           private List<DetailedAggregationValue> values;
+       }
+   
+       public static class GroupInfo {
+           private Map<String, String> groupInfo;
+       }
+   
+       public static class DetailedAggregationValue {
+           private Double value;
+           private Long secondsSinceEpochUtc;
+           private final Double percentageFromPrevious;
+       }
+   }
+```
+
+Where:
+1. **metadata** - represents the aggregation id which is exactly the spec you mentioned as a query in the 'Get' api 
+   (for the 'All' and 'Batch' apis each metadata will contain a query id for a single meter-api-name).
+2. **secondsSinceEpochIntervals** - is an array of time-slots. Each number there represents a time
+   range which starts with the time the number represents (inclusive) and ends at the next timestamp
+   in the array (or infinity in case the timestamp is the last timestamp). We will see next how this
+   array should be used.
+3. **clientMeters** - this represents the aggregation groups of each meter. It's important to notice there
+   are two type of groups:
+   * **Normal-group** - Groups defined in MeterAggregationMetadata#GroupBy.
+   * **Time-Buckets** - Groups defined by the MeterAggregationMetadata#timeGroupingInterval mentioned above.
+
+   The **clientMeters** list contains a list of the **Normal-group**s where each "Normal-group" contains
+   a list of values, one per **secondsSinceEpochIntervals** time-slot.
+
+In more details **DetailedMeterAggregationGroup** contains:
+1. **group** - which is essentially just a map of string to string which defines the groupBy values.
+2. **groupValue** - the aggregated meter value for the entire time range.
+3. **values** - a list of meter values, 1 per "time-slot" as defined in **secondsSinceEpochIntervals**.
+
+
+
+
 ## Detailed Examples
+### Ingest - Detailed Examples
 See the following apps for more detailed examples and additional features:
-1. **MeteringExamples** - Describes the basic steps of using the meter client and sending meters, and the different 
+1. **MeteringExamples** - Describes the basic steps of using the meter client and sending meters, and the different
    ways you can call the metering-service (not including thread-context).
-2. **MeteringInDevExample** - Describes the different meters-clients (direct and stdout). More specifically it shows 
+2. **MeteringInDevExample** - Describes the different meters-clients (direct and stdout). More specifically it shows
    that you can send the meters to std-out while you are in 'dev' env.
-3. **MultiThreadExample** - In this example we simulated a multi-threads service. This example demonstrates that its 
+3. **MultiThreadExample** - In this example we simulated a multi-threads service. This example demonstrates that its
    easy and safe to call the meter service from many threads.
-4. **ThreadContextExample** - This example shows how to define common attributes to be shared by many related meters 
-   (customer id, session id, etc).
+4. **ThreadContextExample** - This example shows how to define common attributes to be shared by many related meters
+   (user id, session id, etc).
+
+### Usage - Detailed Examples
+1. **UsageExample** - Describes the main use-cases and rules of the 'Usage-Api'.
+
+### Customer-Details - Detailed Examples
+1. **UsageExample** - An example app which shows how to interact with the customer-details api.
 
 

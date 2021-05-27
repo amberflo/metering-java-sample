@@ -1,4 +1,4 @@
-package demo;
+package demo.ingest;
 
 import com.amberflo.metering.ingest.MeteringContext;
 import com.amberflo.metering.ingest.meter_message.Domain;
@@ -22,7 +22,7 @@ import java.util.List;
  * producer fifteen).
  */
 public class MultiThreadExample {
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         System.setProperty(MeteringContext.METERING_DOMAIN, Domain.Prod.toString());
 
         // Create 15 ProducerThread with ids from 1 to 15.
