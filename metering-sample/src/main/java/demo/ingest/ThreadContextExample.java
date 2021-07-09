@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.amberflo.metering.ingest.MeteringContext.metering;
-import static com.amberflo.metering.ingest.extensions.ServiceMetering.serviceMetering;
 import static com.amberflo.metering.ingest.extensions.CustomerMetering.customerMetering;
+import static com.amberflo.metering.ingest.extensions.ServiceMetering.serviceMetering;
 
 /**
  * This example shows how to use the {@link ThreadContext}.

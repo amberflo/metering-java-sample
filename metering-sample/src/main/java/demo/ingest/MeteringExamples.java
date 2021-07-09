@@ -5,17 +5,15 @@ import com.amberflo.metering.ingest.extensions.ServiceMetering;
 import com.amberflo.metering.ingest.meter_message.Domain;
 import com.amberflo.metering.ingest.meter_message.MeterMessage;
 import com.amberflo.metering.ingest.meter_message.MeterMessageBuilder;
-
+import com.amberflo.metering.ingest.meter_message.Region;
+import static com.amberflo.metering.ingest.MeteringContext.metering;
+import static com.amberflo.metering.ingest.extensions.CustomerMetering.customerMetering;
+import static com.amberflo.metering.ingest.extensions.ServiceMetering.serviceMetering;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.amberflo.metering.ingest.meter_message.Region;
-
-import static com.amberflo.metering.ingest.MeteringContext.metering;
-import static com.amberflo.metering.ingest.extensions.ServiceMetering.serviceMetering;
-import static com.amberflo.metering.ingest.extensions.CustomerMetering.customerMetering;
 
 /**
  * In this app we describe different ways to call the metering services:
@@ -36,7 +34,6 @@ public class MeteringExamples {
     private final static LocalDateTime EVENT_TIME = LocalDateTime.now();
     private final static  Double MB_USED = 15.5;
     private final static double PROCESSING_TIME_MILLIS = 100;
-
     private final static boolean ERROR_FLAG = true;
 
     private final static Map<String, String> EXTRA_DIMENSIONS_MAP = null;
