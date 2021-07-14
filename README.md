@@ -7,12 +7,13 @@ The client contains 3 main apis:
 3. Customer-Details - allows you to easily define your customers in Amberflo.
 
 ## Ingest - Basic guidelines
-### Step 1: Setup Dev/Prod client configs
-Add two files to the 'Resources' folder of your project:
+### Step 1: Setup Dev/Prod/S3 client configs
+Added three files to the 'Resources' folder of your project:
 1. dev-metering.json
 2. prod-metering.json
+3. s3-metering.json
 
-Recommended - Setup dev to use 'StandardOutputClient' for Dev, and 'DirectClient' for prod. This way when you are in 
+Recommended - Setup dev to use 'StandardOutputClient' for Dev, 'DirectClient' for prod, and 'S3MeteringCLient' to use S3 Metering client. This way when you are in 
 dev you don't have to send real meters.
 
 #### For Dev
@@ -41,7 +42,7 @@ Comment:
 ```
 {
   "clientType": "DirectClient",
-  "maxAsyncQueyeSize": 20000,
+  "maxAsyncQueueSize": 20000,
   "params": {
     "maxDelayInSec": 0.5,
     "apiKey": "your-api-key",
@@ -54,7 +55,7 @@ Comment:
 Change the:
 1. **apiKey** - To your amberflo's api-key string.
 2. **serviceName** - To your the name of your service. The service name will be added for all of your meters as an extra dimension.
-3. **maxAsyncQueyeSize** - Discard it (optional Parameter default to 100,000), or change it to a value bigger than 1000. 
+3. **maxAsyncQueueSize** - Discard it (optional Parameter default to 100,000), or change it to a value bigger than 1000. 
 
 ### Step 2: Define a 'metering_domain' System env
 By default, the metering client uses the 'dev-metering.json' for setting up the metering client. If you want to tell the
@@ -73,6 +74,26 @@ System.setProperty(MeteringContext.METERING_DOMAIN, Domain.Prod.toString());
 
 Or load it from a properties file (see https://docs.oracle.com/javase/tutorial/essential/environment/sysprop.html for 
 more info).
+
+### Creating a S3Metering client 
+There are 2 ways to create a S3Metering client. We can either create a client using config file such as s3-metering.json or we can use create client method and pass the bucket name, access key, secret key to the context.
+
+
+#### For S3 Metering Clients config file
+```
+{
+  "clientType": "S3MeteringClient",
+  "isAsync": false,
+  "maxAsyncQueueSize": 20000,
+  "params": {
+    "maxDelayInSec": 0.5,
+    "maxBatchSize": 10,
+    "bucketName": "3-amberflo",
+    "httpRetriesCount": 5,
+    "httpTimeOutSeconds": 30
+  }
+}
+```
 
 ### Step 3: Send meters
 Use the metering builder, factory or templates to send meters.

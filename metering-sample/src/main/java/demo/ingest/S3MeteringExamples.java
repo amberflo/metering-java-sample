@@ -41,7 +41,6 @@ public class S3MeteringExamples {
                     .build();
 
             metering().meter(meter);
-            context.flushAndClose();
         }
     }
 
@@ -50,14 +49,14 @@ public class S3MeteringExamples {
      * to the context.
      */
     private static void createS3MeteringClientWithCredentials() {
-        MeteringContext.contextWithS3Client(BUCKET_NAME, ACCESS_KEY, SECRET_KEY, 5, 30);
+        try(MeteringContext context = MeteringContext.contextWithS3Client(BUCKET_NAME, ACCESS_KEY, SECRET_KEY,
+                5, 30)) {
+            final MeterMessage meter = MeterMessageBuilder
+                    .createInstance(METER_NAME, EVENT_TIME, CUSTOMER_ID)
+                    .setMeterValue(METER_VALUE)
+                    .build();
 
-        final MeterMessage meter = MeterMessageBuilder
-                .createInstance(METER_NAME, EVENT_TIME, CUSTOMER_ID)
-                .setMeterValue(METER_VALUE)
-                .build();
-
-        metering().meter(meter);
-        MeteringContext.flushAndClose();
+            metering().meter(meter);
+        }
     }
 }
