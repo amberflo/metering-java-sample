@@ -1,0 +1,12 @@
+{
+  "clientType": "S3MeteringClient",
+  "isAsync": false,
+  "maxAsyncQueueSize": 20000,
+  "params": {
+    "maxDelayInSec": 0.5,
+    "maxBatchSize": 10,
+    "bucketName": "3-amberflo",
+    "httpRetriesCount": 5,
+    "httpTimeOutSeconds": 30
+  }
+}

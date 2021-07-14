@@ -1,6 +1,6 @@
 {
   "clientType": "DirectClient",
-  "maxAsyncQueyeSize": 20000,
+  "maxAsyncQueueSize": 20000,
   "params": {
     "maxDelayInSec": 0.5,
     "apiKey": "your-app-key",

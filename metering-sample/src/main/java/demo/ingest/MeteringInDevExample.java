@@ -1,15 +1,15 @@
 package demo.ingest;
 
+import com.amberflo.metering.ingest.Metering;
+import com.amberflo.metering.ingest.MeteringContext;
+import com.amberflo.metering.ingest.clients.DirectMeteringClient;
+import com.amberflo.metering.ingest.clients.StandardOutputMeteringClient;
+import com.amberflo.metering.ingest.meter_message.Domain;
+
 import java.time.LocalDateTime;
 import java.util.Map;
 
 import static com.amberflo.metering.ingest.MeteringContext.metering;
-
-import com.amberflo.metering.ingest.Metering;
-import com.amberflo.metering.ingest.MeteringContext;
-import com.amberflo.metering.ingest.meter_message.Domain;
-import com.amberflo.metering.ingest.clients.StandardOutputMeteringClient;
-import com.amberflo.metering.ingest.clients.DirectMeteringClient;
 
 /**
  * This example came to describe how to set up the metering client config for different domains. As part of that we
