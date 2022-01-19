@@ -272,7 +272,8 @@ See the following apps for more detailed examples and additional features:
 ### Usage - Detailed Examples
 1. **UsageExample** - Describes the main use-cases and rules of the 'Usage-Api'.
 
-### Customer-Details - Detailed Examples
-1. **UsageExample** - An example app which shows how to interact with the customer-details api.
+## Customer - Detailed Examples
+1. **CustomerDetailsExample** - An example app which shows how to interact with the customer-details api.
+2. **CustomerProductInvoiceExample** - An example app which shows how to interact with the customer-product-invoice api.
 
 
