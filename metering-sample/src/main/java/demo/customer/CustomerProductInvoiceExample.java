@@ -10,6 +10,9 @@ import java.util.List;
 
 /**
  * An example app which shows how to interact with the customer-product-invoice api.
+ *
+ * NOTICE - you can also implement "pay-as-you-go" policy with your customers using this client (see example 3 for
+ * more details).
  */
 public class CustomerProductInvoiceExample {
     private static final String CUSTOMER_ID = "5555";
@@ -47,6 +50,14 @@ public class CustomerProductInvoiceExample {
         final DetailedCustomerProductInvoice latestInvoice1 = client.getLatest(CUSTOMER_ID);
         System.out.println("Example 3 - latest invoice of product 1, fresh, and without payment status");
         System.out.println(gson.toJson(latestInvoice1));
+
+        // Notice that the latest OPEN invoice gives you a view for the available amount of pay-as-you-go money for the
+        // current latest invoice (how much more can be spent for the current invoice using prepaid or the plan-free
+        // tier money).
+        System.out.println("Available pay-as-you-go money (real currency):");
+        System.out.println(latestInvoice1.getAvailablePayAsYouGoMoney());
+        System.out.println("Available pay-as-you-go money (credit units):");
+        System.out.println(latestInvoice1.getAvailablePayAsYouGoMoneyInCredits());
 
         // Example 4 - you can also ask for the latest invoice of the default product. This time it retrieve you
         // only the latest invoice, based on fresh usage data, but without a payment status.
