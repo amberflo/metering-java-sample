@@ -1,7 +1,7 @@
-package demo.customer_details;
+package demo.customer;
 
-import com.amberflo.metering.customer_details.clients.CustomerDetailsClient;
-import com.amberflo.metering.customer_details.model.CustomerDetails;
+import com.amberflo.metering.customer.clients.CustomerDetailsClient;
+import com.amberflo.metering.customer.model.CustomerDetails;
 
 import java.util.Map;
 import java.util.UUID;
