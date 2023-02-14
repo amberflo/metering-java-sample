@@ -11,6 +11,7 @@ import static com.amberflo.metering.ingest.extensions.CustomerMetering.customerM
 import static com.amberflo.metering.ingest.extensions.ServiceMetering.serviceMetering;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,7 +32,7 @@ public class MeteringExamples {
     private final static String CUSTOMER_ID = "YWJjNDU2";
     private final static String SERVICE_CALL = "process-request";
     private final static String SERVICE_NAME = "magic-service";
-    private final static LocalDateTime EVENT_TIME = LocalDateTime.now();
+    private final static LocalDateTime EVENT_TIME = LocalDateTime.now(ZoneOffset.UTC);
     private final static  Double MB_USED = 15.5;
     private final static double PROCESSING_TIME_MILLIS = 100;
     private final static boolean ERROR_FLAG = true;
